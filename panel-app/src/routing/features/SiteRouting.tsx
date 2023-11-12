@@ -3,16 +3,20 @@ import { lazy, Suspense } from "react";
 import { Navigate, Outlet, Route, RouteProps } from "react-router-dom";
 import { AppRoutes, RouteName } from "../common/routes";
 import { AppPageLoader } from "@benbeck764/react-components";
+import { Auth0Guard } from "../../auth/Auth0Guard";
 
 const Home = lazy(() => import("../../features/home/Home"));
 const Unity = lazy(() => import("../../features/unity/Unity"));
+const Dashboard = lazy(() => import("../../features/dashboard/Dashboard"));
 
 export const getSiteRoutes = (): RouteProps[] => [
   {
     path: AppRoutes[RouteName.Site].path,
     element: (
       <Suspense fallback={<AppPageLoader />}>
-        <Outlet />
+        <Auth0Guard>
+          <Outlet />
+        </Auth0Guard>
       </Suspense>
     ),
     children: (
@@ -30,7 +34,7 @@ export const getSiteRoutes = (): RouteProps[] => [
         <Route
           index
           path={AppRoutes[RouteName.Dashboard].path}
-          element={<Home />}
+          element={<Dashboard />}
         ></Route>
         <Route
           index

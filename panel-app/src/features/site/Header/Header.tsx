@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { StyledHeaderContainer } from "./Header.styles";
 import { AppRoutes, RouteName } from "../../../routing/common/routes";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -12,9 +13,30 @@ import TrueAnomalyLogo from "../../../assets/True_Anomaly_Logo.jpg";
 import { NavigationDrawer } from "./components/Navigation/NavigationDrawer";
 
 export const Header: FC = () => {
+  const {
+    loginWithRedirect,
+    logout: logoutWithRedirect,
+    isAuthenticated,
+  } = useAuth0();
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { breakpoint } = useBreakpoint();
+
+  const login = async (): Promise<void> => {
+    await loginWithRedirect({
+      appState: {
+        returnTo: window.location.pathname,
+      },
+    });
+  };
+
+  const logout = (): void => {
+    logoutWithRedirect({
+      logoutParams: {
+        returnTo: `${window.location.origin}${AppRoutes[RouteName.Site].path}`,
+      },
+    });
+  };
 
   return (
     <>
@@ -61,7 +83,28 @@ export const Header: FC = () => {
                 display="flex"
                 alignItems="center"
                 justifyContent="flex-end"
-              ></Grid>
+              >
+                {!isAuthenticated && (
+                  <AppButton
+                    variant="text"
+                    size="small"
+                    color="primary"
+                    onClick={() => login()}
+                  >
+                    Login
+                  </AppButton>
+                )}
+                {isAuthenticated && (
+                  <AppButton
+                    variant="text"
+                    size="small"
+                    color="secondary"
+                    onClick={() => logout()}
+                  >
+                    Logout
+                  </AppButton>
+                )}
+              </Grid>
             </Grid>
           </Toolbar>
         </AppBar>

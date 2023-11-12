@@ -47,7 +47,7 @@ export const getPalette = (): PaletteOptions => {
       light: "#3FAF51",
     },
     secondary: {
-      main: "#DDE1E6",
+      main: "#191414",
       light: "#58B7ED",
       dark: "#C1C7CD",
     },

@@ -59,7 +59,7 @@ export const NavigationDrawer: FC = () => {
     {
       label: "Dashboard",
       variant: NavigationOptionVariant.Button,
-      navigationRoute: AppRoutes[RouteName.Unity].path,
+      navigationRoute: AppRoutes[RouteName.Dashboard].path,
       icon: (
         <BarChartIcon
           sx={{
