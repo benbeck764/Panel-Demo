@@ -23,6 +23,16 @@ export const getSiteRoutes = (): RouteProps[] => [
         ></Route>
         <Route
           index
+          path={AppRoutes[RouteName.Unity].path}
+          element={<Home />}
+        ></Route>
+        <Route
+          index
+          path={AppRoutes[RouteName.Dashboard].path}
+          element={<Home />}
+        ></Route>
+        <Route
+          index
           path="*"
           element={<Navigate to={AppRoutes[RouteName.Site].path} replace />}
         ></Route>

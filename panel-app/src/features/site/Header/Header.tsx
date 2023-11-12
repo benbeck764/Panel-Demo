@@ -2,7 +2,6 @@ import { FC } from "react";
 import { StyledHeaderContainer } from "./Header.styles";
 import { AppRoutes, RouteName } from "../../../routing/common/routes";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Navigation } from "./components/Navigation/Navigation";
 import { AppButton, useBreakpoint } from "@benbeck764/react-components";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,6 +9,7 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import TrueAnomalyLogo from "../../../assets/True_Anomaly_Logo.jpg";
+import { NavigationDrawer } from "./components/Navigation/NavigationDrawer";
 
 export const Header: FC = () => {
   const { pathname } = useLocation();
@@ -35,11 +35,9 @@ export const Header: FC = () => {
                 justifyContent="flex-start"
               >
                 <Stack direction="row" alignItems="center" gap={2}>
-                  {breakpoint !== "xl" && (
-                    <Box>
-                      <Navigation variant="drawer" />
-                    </Box>
-                  )}
+                  <Box>
+                    <NavigationDrawer />
+                  </Box>
                   <AppButton>
                     <Box
                       component="img"
@@ -55,12 +53,6 @@ export const Header: FC = () => {
                       }}
                     ></Box>
                   </AppButton>
-
-                  {breakpoint === "xl" && (
-                    <Box ml={4}>
-                      <Navigation variant="bar" />
-                    </Box>
-                  )}
                 </Stack>
               </Grid>
               <Grid

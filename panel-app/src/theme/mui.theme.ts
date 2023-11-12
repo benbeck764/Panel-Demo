@@ -19,9 +19,6 @@ export const getMUITheme = (themeBaseOptions: ThemeOptions): ThemeOptions => {
               backgroundColor: "transparent",
             },
           },
-          body: {
-            overflowY: "scroll", // Scrollbar always exists to avoid flickering
-          },
         },
       },
       MuiCard: {
@@ -30,7 +27,7 @@ export const getMUITheme = (themeBaseOptions: ThemeOptions): ThemeOptions => {
         },
         styleOverrides: {
           root: {
-            backgroundColor: themeBase.palette.coolGrey[900],
+            backgroundColor: themeBase.palette.grey[800],
           },
         },
       },
@@ -40,7 +37,25 @@ export const getMUITheme = (themeBaseOptions: ThemeOptions): ThemeOptions => {
         },
         styleOverrides: {
           root: {
-            backgroundColor: themeBase.palette.coolGrey[900],
+            backgroundColor: themeBase.palette.grey[800],
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          text: {
+            "&.MuiButton-text": {
+              "&:focus": {
+                color: themeBase.palette?.action.focus,
+              },
+            },
+          },
+        },
+      },
+      MuiBackdrop: {
+        styleOverrides: {
+          root: {
+            backdropFilter: `blur(4.5px) brightness(0.65)`,
           },
         },
       },

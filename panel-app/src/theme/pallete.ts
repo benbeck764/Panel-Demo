@@ -36,7 +36,7 @@ export const getPalette = (): PaletteOptions => {
     ...paletteBase,
     mode: "light",
     background: {
-      default: paletteBase.grey?.[900],
+      default: "#232323",
     },
     common: {
       white: "#FFFFFF",
@@ -53,10 +53,10 @@ export const getPalette = (): PaletteOptions => {
     },
     action: {
       disabled: "#C1C7CD",
-      focus: "#004B66",
+      focus: "#FF5519",
     },
     text: {
-      primary: "#191414",
+      primary: "#FFFFFF",
       secondary: "#ABABAB",
     },
     success: {
