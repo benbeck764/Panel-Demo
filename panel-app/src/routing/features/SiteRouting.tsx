@@ -5,6 +5,7 @@ import { AppRoutes, RouteName } from "../common/routes";
 import { AppPageLoader } from "@benbeck764/react-components";
 
 const Home = lazy(() => import("../../features/home/Home"));
+const Unity = lazy(() => import("../../features/unity/Unity"));
 
 export const getSiteRoutes = (): RouteProps[] => [
   {
@@ -24,7 +25,7 @@ export const getSiteRoutes = (): RouteProps[] => [
         <Route
           index
           path={AppRoutes[RouteName.Unity].path}
-          element={<Home />}
+          element={<Unity />}
         ></Route>
         <Route
           index

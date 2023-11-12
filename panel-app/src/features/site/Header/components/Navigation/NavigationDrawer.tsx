@@ -16,6 +16,7 @@ import { Theme } from "@mui/material/styles";
 import { AppRoutes, RouteName } from "../../../../../routing/common/routes";
 import SatelliteAltIcon from "@mui/icons-material/SatelliteAlt";
 import BarChartIcon from "@mui/icons-material/BarChart";
+import { AppLink } from "./AppLink";
 
 export const NavigationDrawer: FC = () => {
   const { pathname } = useLocation();
@@ -224,27 +225,31 @@ export const NavigationDrawer: FC = () => {
                       </Box>
                     </AppDropdown>
                   ) : (
-                    <AppMenuItem
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: (theme) => theme.palette.grey[700],
-                        },
-                        width: "100%",
-                        py: 1.25,
-                      }}
-                      onSelect={handleButtonVariantClick(config)}
-                    >
-                      <Stack direction="row" alignItems="center" gap={1.5}>
-                        {config.icon && config.icon}
-                        <Typography
-                          sx={{ color: (theme) => theme.palette.common.white }}
-                          variant="paragraphLarge"
-                          color="primary"
-                        >
-                          {config.label}
-                        </Typography>
-                      </Stack>
-                    </AppMenuItem>
+                    <AppLink to={config.navigationRoute ?? ""}>
+                      <AppMenuItem
+                        sx={{
+                          "&:hover": {
+                            backgroundColor: (theme) => theme.palette.grey[700],
+                          },
+                          width: "100%",
+                          py: 1.25,
+                        }}
+                        onSelect={handleButtonVariantClick(config)}
+                      >
+                        <Stack direction="row" alignItems="center" gap={1.5}>
+                          {config.icon && config.icon}
+                          <Typography
+                            sx={{
+                              color: (theme) => theme.palette.common.white,
+                            }}
+                            variant="paragraphLarge"
+                            color="primary"
+                          >
+                            {config.label}
+                          </Typography>
+                        </Stack>
+                      </AppMenuItem>
+                    </AppLink>
                   )}
                 </Fragment>
               )
