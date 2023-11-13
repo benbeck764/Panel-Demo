@@ -31,9 +31,9 @@ const Dashboard: FC = () => {
   };
 
   const STATIC_DATA = false;
-  const dataCount = 501000;
+  const dataCount = 11000;
   const initialSplice = dataCount - 1000;
-  const newDataHz = 100;
+  const newDataHz = 8;
 
   useEffect(() => {
     // Set wave parameters
@@ -76,9 +76,9 @@ const Dashboard: FC = () => {
       } | Memory: ${(memoryUsage / 1024 / 1024).toFixed(2)} MB`}</Typography>
       {data.length > 0 && (
         <Stack gap={2}>
-          {/* Using ~ 55MB @ 15k DP - With No Visual */}
+          {/* Using ~20-25MB @ 15k DP - With No Visual */}
 
-          {/* Notes: Extremely high memory consumption*/}
+          {/* Notes: Extremely high memory consumption */}
           {/* Static: Slow to render ~7s @ 50k DP | Maximum: 50k DP */}
           {/* Dynamic: Using upward of 300+ MB @ 15k DP | Maximum: 15k DP */}
           {/* <ReChartsDemo data={data} initialDataLength={initialSplice} /> */}
@@ -92,6 +92,7 @@ const Dashboard: FC = () => {
           {/* <ChartJsDemo data={data} initialDataLength={initialSplice} /> */}
 
           {/* Static: Okay with render ~1s @ 1M DP | Maximum: ??? DP */}
+          {/* Dynamic: Using upward of 75+ MB @ 15k DP | Maximum: 15k DP */}
           <D3Demo data={data} initialDataLength={initialSplice} />
         </Stack>
       )}

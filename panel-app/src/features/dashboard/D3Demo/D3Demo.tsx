@@ -55,18 +55,21 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
   const initializeChart = (): void => {
     const viewDiv = d3.select("#chart-view-div");
 
+    const svgWidth = width + margin.left + margin.right;
+    const svgHeight = height + margin.bottom + margin.top;
     const svg = viewDiv
       .append("svg")
       .attr("id", "svg")
-      .attr("width", width)
-      .attr("height", height)
+      .attr("width", svgWidth)
+      .attr("height", svgHeight)
       .style("position", "absolute");
 
     canvas = viewDiv
       .append("canvas")
       .attr("id", "canvas")
       .attr("width", width)
-      .attr("height", height);
+      .attr("height", height)
+      .style("position", "absolute");
 
     context = canvas.node()?.getContext("2d");
 
@@ -91,7 +94,7 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
       .attr("transform", "rotate(-90)")
       .attr("fill", "#FFFFFF")
       .attr("x", -height / 2)
-      .attr("y", -margin.left + 30)
+      .attr("y", 0)
       .attr("dy", "0.7em")
       .text("Amplitude");
   };
@@ -102,15 +105,22 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
     min: number,
     max: number
   ) => {
-    const step = data.length > 100000 ? 10000 : 1000;
-    return xAxis.tickValues(d3.range(min, max, step)).tickSize(-height);
+    const step =
+      data.length > 500000 ? 100000 : data.length > 100000 ? 10000 : 1000;
+    return xAxis
+      .tickValues(d3.range(min, max, step))
+      .tickSize(-height)
+      .tickFormat((v) => v.toString());
   };
 
   const drawYGridLines = (
     yAxis: d3.Axis<number>,
     width: number
   ): d3.Axis<number> => {
-    return yAxis.tickValues(d3.range(-1, 1, 0.5)).tickSize(width);
+    return yAxis
+      .tickValues(d3.range(-1, 1, 0.5))
+      .tickSize(-width)
+      .tickFormat((v) => v.toString());
   };
 
   const arrayMinMax = (arr: Array<number>): [number, number] =>
@@ -121,7 +131,7 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
 
   const initializeChartData = (): void => {
     xScale = d3.scaleLinear([0, width]);
-    yScale = d3.scaleLinear([-1.05, 1.05], [height, 0]);
+    yScale = d3.scaleLinear([-1, 1], [height, 0]);
 
     xAxis = d3.axisBottom<number>(xScale);
     yAxis = d3.axisLeft<number>(yScale);
@@ -166,9 +176,9 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
   };
 
   return (
-    <AppCard sx={{ p: 2 }}>
+    <AppCard sx={{ p: 2, height: 475 }}>
       <Typography variant="h6">D3 (Canvas)</Typography>
-      <Box width="100%" height={400} id="chart-view-div"></Box>
+      <Box id="chart-view-div" sx={{ my: 2 }}></Box>
     </AppCard>
   );
 };
