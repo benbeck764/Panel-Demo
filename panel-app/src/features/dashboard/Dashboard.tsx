@@ -31,8 +31,9 @@ const Dashboard: FC = () => {
   };
 
   const STATIC_DATA = false;
-  const dataCount = 3000;
+  const dataCount = 501000;
   const initialSplice = dataCount - 1000;
+  const newDataHz = 100;
 
   useEffect(() => {
     // Set wave parameters
@@ -47,7 +48,7 @@ const Dashboard: FC = () => {
 
     const intervalId = setInterval(() => {
       if (!STATIC_DATA) {
-        const newData = waveData.splice(0, 8);
+        const newData = waveData.splice(0, newDataHz);
         if (newData.length) {
           setData((prev) => [...prev, ...newData]);
         } else {
@@ -90,6 +91,7 @@ const Dashboard: FC = () => {
           {/* Dynamic: Using upward of 75+ MB @ 15k DP | Maximum: 15k DP */}
           {/* <ChartJsDemo data={data} initialDataLength={initialSplice} /> */}
 
+          {/* Static: Okay with render ~1s @ 1M DP | Maximum: ??? DP */}
           <D3Demo data={data} initialDataLength={initialSplice} />
         </Stack>
       )}
