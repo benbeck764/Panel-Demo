@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/plots": "^1.2.5",
     "@auth0/auth0-react": "^2.2.3",
     "@benbeck764/react-components": "1.4.0-beta.18",
     "@benbeck764/react-components-grid": "1.4.0-beta.18",

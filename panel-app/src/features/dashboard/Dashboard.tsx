@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Typography from "@mui/material/Typography";
-import { FC, useEffect, useState } from "react";
+import { FC, Profiler, useEffect, useState } from "react";
 import ReChartsDemo from "./ReChartsDemo";
 import NivoDemo from "./NivoDemo";
 import Stack from "@mui/material/Stack";
 import ChartJsDemo from "./ChartJsDemo";
 import D3Demo from "./D3Demo/D3Demo";
+import AntDemo from "./AntDemo";
 
 export type LineChartData = {
   i: number;
@@ -12,7 +14,16 @@ export type LineChartData = {
 };
 
 const Dashboard: FC = () => {
-  const [memoryUsage, setMemoryUsage] = useState<number>(0);
+  const [memory, setMemory] = useState<number[]>([]);
+  const memoryUsage = memory[memory.length - 1] ?? 0;
+  const memoryMax = Math.max(...memory, 0);
+  const memoryAverage =
+    memory.length > 0
+      ? memory.reduce((acc, num) => acc + num, 0) / memory.length
+      : 0;
+  const [initialRenderTime, setInitialRenderTime] = useState<number | null>(
+    null
+  );
   const [data, setData] = useState<LineChartData[]>([]);
 
   const generateWaveData = (
@@ -31,10 +42,11 @@ const Dashboard: FC = () => {
   };
 
   const STATIC_DATA = false;
-  const dataCount = 11000;
+  const dataCount = 1001000;
   const initialSplice = dataCount - 1000;
   const newDataHz = 8;
 
+  // Why does memoryMax not get updated?
   useEffect(() => {
     // Set wave parameters
     const amplitude = 1; // Amplitude of the wave
@@ -59,7 +71,8 @@ const Dashboard: FC = () => {
       // @ts-expect-error memory does not exist
       if (window.performance && window.performance.memory) {
         // @ts-expect-error memory does not exist
-        setMemoryUsage(window.performance.memory.usedJSHeapSize);
+        const heapSize = window.performance.memory.usedJSHeapSize;
+        setMemory((prev) => [...prev, heapSize]);
       }
     }, 1000);
 
@@ -68,32 +81,74 @@ const Dashboard: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleOnRender = (
+    _id: string,
+    phase: "mount" | "update",
+    _actualDuration: number,
+    _baseDuration: number,
+    _startTime: number,
+    commitTime: number
+  ): void => {
+    if (!initialRenderTime && phase === "update") {
+      setInitialRenderTime(commitTime);
+    }
+  };
+
   return (
     <Stack gap={1}>
       <Typography variant="h3">Dashboard</Typography>
-      <Typography variant="paragraphBold">{`Data Points: ${
-        data.length
-      } | Memory: ${(memoryUsage / 1024 / 1024).toFixed(2)} MB`}</Typography>
+      <Typography variant="paragraphBold">{`Data Points: ${data.length} (${
+        STATIC_DATA ? "Static" : `Dynamic: ${newDataHz} Hz`
+      })`}</Typography>
+      <Typography variant="paragraphBold">{`Initial Render: ${
+        initialRenderTime ? `${Math.round(initialRenderTime)} ms` : "-"
+      }`}</Typography>
+      <Typography variant="paragraphBold">
+        {`Heap Size: ${(memoryUsage / 1024 / 1024).toFixed(2)} MB`}
+        {" | "}
+        <Typography
+          color="#00C853"
+          variant="paragraphBold"
+          component="span"
+        >{`Average Heap Size: ${(memoryAverage / 1024 / 1024).toFixed(
+          2
+        )} MB`}</Typography>
+        {" | "}
+        <Typography
+          color="error"
+          variant="paragraphBold"
+          component="span"
+        >{`Max Heap Size: ${(memoryMax / 1024 / 1024).toFixed(
+          2
+        )} MB`}</Typography>
+      </Typography>
+
       {data.length > 0 && (
         <Stack gap={2}>
-          {/* Using ~20-25MB @ 15k DP - With No Visual */}
+          <Profiler id="Chart" onRender={handleOnRender}>
+            {/* Using ~20-25MB @ 15k DP - With No Visual */}
 
-          {/* Notes: Extremely high memory consumption */}
-          {/* Static: Slow to render ~7s @ 50k DP | Maximum: 50k DP */}
-          {/* Dynamic: Using upward of 300+ MB @ 15k DP | Maximum: 15k DP */}
-          {/* <ReChartsDemo data={data} initialDataLength={initialSplice} /> */}
+            {/* Notes: Extremely high memory consumption */}
+            {/* Static: Slow to render ~7s @ 50k DP | Maximum: 50k DP */}
+            {/* Dynamic: Using upward of 300+ MB @ 15k DP | Maximum: 15k DP */}
+            {/* <ReChartsDemo data={data} initialDataLength={initialSplice} /> */}
 
-          {/* Static: Slow to render ~7s @ 50k DP | Maximum: 50k DP */}
-          {/* Dynamic: Using upward of 300+ MB @ 15k DP | Maximum: 15k DP */}
-          {/* <NivoDemo data={data} initialDataLength={initialSplice} /> */}
+            {/* Static: Slow to render ~7s @ 50k DP | Maximum: 50k DP */}
+            {/* Dynamic: Using upward of 300+ MB @ 15k DP | Maximum: 15k DP */}
+            {/* <NivoDemo data={data} initialDataLength={initialSplice} /> */}
 
-          {/* Static: Okay with render ~7s @ 75k DP | Maximum: 75k DP */}
-          {/* Dynamic: Using upward of 75+ MB @ 15k DP | Maximum: 15k DP */}
-          {/* <ChartJsDemo data={data} initialDataLength={initialSplice} /> */}
+            {/* Static: Okay with render ~2s @ 1M DP | Maximum: ??? DP */}
+            {/* Dynamic: Using upward of 900+ MB @ 1M DP | Maximum: 1M+ DP */}
+            {/* <ChartJsDemo data={data} initialDataLength={initialSplice} /> */}
 
-          {/* Static: Okay with render ~1s @ 1M DP | Maximum: ??? DP */}
-          {/* Dynamic: Using upward of 75+ MB @ 15k DP | Maximum: 15k DP */}
-          <D3Demo data={data} initialDataLength={initialSplice} />
+            {/* Static: Okay with render ~6s @ 500k DP | Maximum: 500k+ DP */}
+            {/* Dynamic: Using upward of 250+ MB @ 100k DP | Maximum: 100k DP */}
+            {/* <AntDemo data={data} initialDataLength={initialSplice} /> */}
+
+            {/* Static: Okay with render ~1s @ 1M DP | Maximum: ??? DP */}
+            {/* Dynamic: Using upward of 400+ MB @ 1M DP | Maximum: 1M+ DP */}
+            <D3Demo data={data} initialDataLength={initialSplice} />
+          </Profiler>
         </Stack>
       )}
     </Stack>

@@ -45,13 +45,6 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  // const reinitialize = (): void => {
-  //   d3.select("#svg").remove();
-  //   d3.select("#canvas").remove();
-  //   initializeChart();
-  //   initializeChartData();
-  // };
-
   const initializeChart = (): void => {
     const viewDiv = d3.select("#chart-view-div");
 
@@ -143,7 +136,6 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
     const values = data.map((value: LineChartData) => value.i);
     const [minValue, maxValue] = arrayMinMax(values);
     xScale.domain([minValue + (maxValue - initialDataLength), maxValue]);
-    //console.log(xScale.domain());
 
     // Update the axis with modified scale & draw gridlines
     xAxis.scale(xScale)(
@@ -151,6 +143,8 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
     );
     yAxis.scale(yScale)(yAxisG.call(drawYGridLines(yAxis, width)));
 
+    // Using D3, I'm completely clearing a canvas and then redrawing a line every second.
+    // Is there a more efficient way of updating the canvas line rather than completely redrawing it?
     canvas = d3.select<HTMLCanvasElement, unknown>("#canvas");
     context = canvas.node()?.getContext("2d");
     if (context) {

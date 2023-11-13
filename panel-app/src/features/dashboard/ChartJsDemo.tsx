@@ -45,8 +45,6 @@ const ChartJsDemo: FC<ChartJsDemoProps> = (props: ChartJsDemoProps) => {
         data: data.map((val) => val.y),
         borderColor: theme.palette.action.focus,
         backgroundColor: theme.palette.action.focus,
-        spanGaps: true, // +1 performance
-        showLine: false, // +1 performance
       },
     ],
   };
@@ -58,11 +56,25 @@ const ChartJsDemo: FC<ChartJsDemoProps> = (props: ChartJsDemoProps) => {
     responsive: true,
     animation: false, // +1 performance
     spanGaps: true, // +1 performance
-    showLine: false, // +1 performance
+    // [NB]: Only draw lines, no points - this is rather performant
+    showLine: true, // +1 performance
+    datasets: {
+      line: {
+        pointRadius: 0, // +1 performance
+      },
+    },
+    elements: {
+      point: {
+        radius: 0, // +1 performance
+      },
+    },
 
     plugins: {
       legend: {
         display: false,
+      },
+      tooltip: {
+        enabled: false, // +1 performance
       },
     },
     scales: {
