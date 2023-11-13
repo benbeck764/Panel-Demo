@@ -16,10 +16,7 @@ export const StyledPageContent = styled(Box)(({ theme }: { theme: Theme }) => ({
   [theme.breakpoints.up("xs")]: {
     width: "calc(100% - 24px)",
   },
-  [theme.breakpoints.up("xl")]: {
-    maxWidth: theme.pageWidths["xl"],
-    width: theme.contentWidths?.["xl"],
-  },
+
   marginTop: theme.pageContentMargin,
   marginBottom: theme.pageContentMargin,
 }));

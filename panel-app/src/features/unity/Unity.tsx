@@ -1,10 +1,9 @@
 //import { useAuth0 } from "@auth0/auth0-react";
 import AppButton from "@benbeck764/react-components/Button";
-import AppCard from "@benbeck764/react-components/Card";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { FC, createRef } from "react";
 import { StyledIframe } from "./Unity.styles";
+import Stack from "@mui/material/Stack";
 
 const Unity: FC = () => {
   //const { getAccessTokenSilently } = useAuth0();
@@ -42,22 +41,23 @@ const Unity: FC = () => {
   };
 
   return (
-    <AppCard sx={{ p: 2 }}>
-      <Typography variant="h3">Unity</Typography>
-      <AppButton onClick={toggleFullscreen}>Toggle Fullscreen</AppButton>
-      <Box width={1200} height={1000}>
+    <Box>
+      <Stack direction="row" justifyContent="flex-end">
+        <AppButton onClick={toggleFullscreen}>Toggle Fullscreen</AppButton>
+      </Stack>
+      <Box width="100%" height="100%">
         <StyledIframe
           ref={iframeRef}
           title="Unity WebGL"
           src="/WebGL_Build/index.html"
-          width="1200"
+          width="100%"
           height="1000"
           scrolling="no"
           seamless={true}
           allowFullScreen={true}
         />
       </Box>
-    </AppCard>
+    </Box>
   );
 };
 
