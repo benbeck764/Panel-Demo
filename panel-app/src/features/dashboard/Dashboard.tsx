@@ -42,19 +42,25 @@ const Dashboard: FC = () => {
   };
 
   const STATIC_DATA = false;
-  const dataCount = 5000;
-  const initialSplice = dataCount - 1000;
-  const newDataHz = 8;
+  const realTimeDataCount = 100000;
+  const initialDataCount = 1000000 + realTimeDataCount;
+  const newDataHz = 1000;
 
-  // Why does memoryMax not get updated?
+  const initialSplice = initialDataCount - realTimeDataCount;
+
   useEffect(() => {
     // Set wave parameters
     const amplitude = 1; // Amplitude of the wave
     const frequency = 4; // Frequency of the wave
-    const phase = 10; // Phase shift of the wave
+    const phase = 0; // Phase shift of the wave
 
     // Generate wave-like data
-    const waveData = generateWaveData(amplitude, frequency, phase, dataCount);
+    const waveData = generateWaveData(
+      amplitude,
+      frequency,
+      phase,
+      initialDataCount
+    );
     const initialData = waveData.splice(0, initialSplice);
     setData(initialData);
 
@@ -147,7 +153,11 @@ const Dashboard: FC = () => {
 
             {/* Static: Okay with render ~1s @ 1M DP | Maximum: ??? DP */}
             {/* Dynamic: Using upward of 400+ MB @ 1M DP | Maximum: 1M+ DP */}
-            <D3Demo data={data} initialDataLength={initialSplice} />
+            <D3Demo
+              data={data}
+              initialDataLength={initialSplice}
+              doubleBuffering={true}
+            />
           </Profiler>
         </Stack>
       )}

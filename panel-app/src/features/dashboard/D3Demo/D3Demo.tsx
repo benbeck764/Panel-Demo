@@ -10,7 +10,7 @@ import * as d3 from "d3";
 import { LineChartData } from "../Dashboard";
 
 const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
-  const { data, initialDataLength } = props;
+  const { data, initialDataLength, doubleBuffering } = props;
   const theme = useTheme();
 
   const width = 1860;
@@ -24,6 +24,14 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
 
   let canvas: d3.Selection<HTMLCanvasElement, unknown, HTMLElement, any>;
   let context: CanvasRenderingContext2D | null | undefined;
+
+  let offscreenCanvas: d3.Selection<
+    HTMLCanvasElement,
+    unknown,
+    HTMLElement,
+    any
+  >;
+  let offscreenContext: CanvasRenderingContext2D | null | undefined;
 
   let xAxisG: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
   let xScale: d3.ScaleLinear<number, number>;
@@ -64,7 +72,15 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
       .attr("height", height)
       .style("position", "absolute");
 
+    offscreenCanvas = viewDiv
+      .append("canvas")
+      .attr("id", "offscreen-canvas")
+      .attr("width", width)
+      .attr("height", height)
+      .style("position", "absolute");
+
     context = canvas.node()?.getContext("2d");
+    offscreenContext = offscreenCanvas.node()?.getContext("2d");
 
     // Create the primary group
     const mainG = svg.append("g");
@@ -116,11 +132,22 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
       .tickFormat((v) => v.toString());
   };
 
-  const arrayMinMax = (arr: Array<number>): [number, number] =>
-    arr.reduce(
-      ([min, max], val) => [Math.min(min, val), Math.max(max, val)],
-      [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY]
-    );
+  const arrayMinMax = (arr: Array<number>): [number, number] => {
+    let min = Number.POSITIVE_INFINITY;
+    let max = Number.NEGATIVE_INFINITY;
+
+    for (let i = 0; i < arr.length; i++) {
+      const val = arr[i];
+      if (val < min) {
+        min = val;
+      }
+      if (val > max) {
+        max = val;
+      }
+    }
+
+    return [min, max];
+  };
 
   const initializeChartData = (): void => {
     xScale = d3.scaleLinear([0, width]);
@@ -143,25 +170,105 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
     );
     yAxis.scale(yScale)(yAxisG.call(drawYGridLines(yAxis, width)));
 
-    // Using D3, I'm completely clearing a canvas and then redrawing a line every second.
-    // Is there a more efficient way of updating the canvas line rather than completely redrawing it?
     canvas = d3.select<HTMLCanvasElement, unknown>("#canvas");
     context = canvas.node()?.getContext("2d");
-    if (context) {
-      context.clearRect(
-        0,
-        0,
-        canvas.node()?.width ?? 0,
-        canvas.node()?.height ?? 0
-      );
-      const line = d3.line().context(context);
-      line.x(([d0, _]) => xScale(d0) ?? 0);
-      line.y(([_, d1]) => yScale(d1) ?? 0);
 
+    offscreenCanvas = d3.select<HTMLCanvasElement, unknown>(
+      "#offscreen-canvas"
+    );
+    offscreenContext = offscreenCanvas.node()?.getContext("2d");
+
+    if (doubleBuffering) {
+      if (context && offscreenContext) {
+        // Clear the off-screen canvas
+        offscreenContext.clearRect(
+          0,
+          0,
+          canvas.node()?.width ?? 0,
+          canvas.node()?.height ?? 0
+        );
+
+        // Configure line
+        const line = d3.line().context(offscreenContext);
+        line.x(([d0, _]) => xScale(d0) ?? 0);
+        line.y(([_, d1]) => yScale(d1) ?? 0);
+
+        // Draw the entire updated line on the off-screen canvas
+        // offscreenContext.beginPath();
+        // line(data.map((val) => [val.i, val.y]));
+        // offscreenContext.strokeStyle = theme.palette.action.focus;
+        // offscreenContext.lineWidth = 7;
+        // offscreenContext.stroke();
+
+        drawLine(data, offscreenContext, xScale, yScale);
+
+        // Swap the off-screen canvas with the on-screen canvas
+        context.clearRect(
+          0,
+          0,
+          canvas.node()?.width ?? 0,
+          canvas.node()?.height ?? 0
+        );
+        context.drawImage(offscreenCanvas.node()!, 0, 0);
+      }
+    } else {
+      if (context) {
+        context.clearRect(
+          0,
+          0,
+          canvas.node()?.width ?? 0,
+          canvas.node()?.height ?? 0
+        );
+        // const line = d3.line().context(context);
+        // line.x(([d0, _]) => {
+        //   return xScale(d0) ?? 0;
+        // });
+        // line.y(([_, d1]) => {
+        //   return yScale(d1) ?? 0;
+        // });
+        // context.beginPath();
+        // line(data.map((val) => [val.i, val.y]));
+        // context.strokeStyle = theme.palette.action.focus;
+        // context.lineWidth = 5;
+        // context.stroke();
+
+        drawLine(data, context, xScale, yScale);
+      }
+    }
+  };
+
+  const drawLine = (
+    data: LineChartData[],
+    context: CanvasRenderingContext2D,
+    xLinearScale: d3.ScaleLinear<number, number>,
+    yLinearScale: d3.ScaleLinear<number, number>
+  ): void => {
+    const length = data.length;
+    const chunkSize = 1000;
+    const result: LineChartData[][] = [];
+
+    for (let i = 0; i < length; i += chunkSize) {
+      const chunk = [];
+      for (let j = 0; j < chunkSize && i + j < length; j++) {
+        chunk.push(data[i + j]);
+      }
+      result.push(chunk);
+    }
+
+    const line = d3.line().context(context);
+    line.x(([d0, _]) => {
+      return xLinearScale(d0) ?? 0;
+    });
+    line.y(([_, d1]) => {
+      return yLinearScale(d1) ?? 0;
+    });
+
+    for (let x = 0; x < result.length; x++) {
+      const dataChunk = result[x];
       context.beginPath();
-      line(data.map((val) => [val.i, val.y]));
+      line(dataChunk.map((val) => [val.i, val.y]));
       context.strokeStyle = theme.palette.action.focus;
-      context.lineWidth = 7;
+      context.lineWidth = 5;
       context.stroke();
     }
   };
