@@ -155,12 +155,9 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
         canvas.node()?.height ?? 0
       );
       const line = d3.line().context(context);
-      line.x(([d0, _]) => {
-        return xScale(d0) ?? 0;
-      });
-      line.y(([_, d1]) => {
-        return yScale(d1) ?? 0;
-      });
+      line.x(([d0, _]) => xScale(d0) ?? 0);
+      line.y(([_, d1]) => yScale(d1) ?? 0);
+
       context.beginPath();
       line(data.map((val) => [val.i, val.y]));
       context.strokeStyle = theme.palette.action.focus;

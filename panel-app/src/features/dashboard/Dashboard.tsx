@@ -42,7 +42,7 @@ const Dashboard: FC = () => {
   };
 
   const STATIC_DATA = false;
-  const dataCount = 1001000;
+  const dataCount = 5000;
   const initialSplice = dataCount - 1000;
   const newDataHz = 8;
 
