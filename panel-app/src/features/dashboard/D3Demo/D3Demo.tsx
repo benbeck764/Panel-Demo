@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { D3DemoProps, Margin } from "./D3Demo.props";
 import * as d3 from "d3";
 import { LineChartData } from "../Dashboard";
+import { arrayMinMax } from "../../../utilities/array";
 
 const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
   const { data, initialDataLength, doubleBuffering } = props;
@@ -56,6 +57,7 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
   const initializeChart = (): void => {
     const viewDiv = d3.select("#chart-view-div");
 
+    // Create SVG for gridlines
     const svgWidth = width + margin.left + margin.right;
     const svgHeight = height + margin.bottom + margin.top;
     const svg = viewDiv
@@ -65,6 +67,7 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
       .attr("height", svgHeight)
       .style("position", "absolute");
 
+    // Create canvas and offscreen canvas
     canvas = viewDiv
       .append("canvas")
       .attr("id", "canvas")
@@ -136,23 +139,6 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
       .tickValues(d3.range(-1, 1, 0.5))
       .tickSize(-width)
       .tickFormat((v) => v.toString());
-  };
-
-  const arrayMinMax = (arr: Array<number>): [number, number] => {
-    let min = Number.POSITIVE_INFINITY;
-    let max = Number.NEGATIVE_INFINITY;
-
-    for (let i = 0; i < arr.length; i++) {
-      const val = arr[i];
-      if (val < min) {
-        min = val;
-      }
-      if (val > max) {
-        max = val;
-      }
-    }
-
-    return [min, max];
   };
 
   const initializeChartData = (): void => {

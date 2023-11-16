@@ -65,6 +65,7 @@ const Dashboard: FC = () => {
     const initialData = waveData.splice(0, initialSplice);
     setData(initialData);
 
+    // Add "real-time" data every seconds
     const intervalId = setInterval(() => {
       if (!STATIC_DATA) {
         const newData = waveData.splice(0, newDataHz);
@@ -75,6 +76,7 @@ const Dashboard: FC = () => {
         }
       }
 
+      // Track heap size
       // @ts-expect-error memory does not exist
       if (window.performance && window.performance.memory) {
         // @ts-expect-error memory does not exist
@@ -88,6 +90,7 @@ const Dashboard: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Track initial render time
   const handleOnRender = (
     _id: string,
     phase: "mount" | "update",
