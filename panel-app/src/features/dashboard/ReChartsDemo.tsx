@@ -1,5 +1,4 @@
 import AppCard from "@benbeck764/react-components/Card";
-import { Typography, useTheme } from "@mui/material";
 import { FC } from "react";
 import {
   LineChart,
@@ -10,12 +9,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { LineChartData } from "./Dashboard";
+import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
 type ReChartsDemoProps = {
   data: LineChartData[];
   initialDataLength: number;
 };
 
+// https://github.com/recharts/recharts/issues/300
 const ReChartsDemo: FC<ReChartsDemoProps> = (props: ReChartsDemoProps) => {
   const { data, initialDataLength } = props;
   const theme = useTheme();
@@ -29,7 +31,7 @@ const ReChartsDemo: FC<ReChartsDemoProps> = (props: ReChartsDemoProps) => {
             type="monotone"
             dataKey="y"
             stroke={theme.palette.action.focus}
-            strokeWidth={5}
+            strokeWidth={3}
             animateNewValues={false} // +1 Performance
             isAnimationActive={false} // +1 Performance
           />

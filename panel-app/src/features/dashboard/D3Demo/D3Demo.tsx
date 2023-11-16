@@ -115,7 +115,13 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
     max: number
   ) => {
     const step =
-      data.length > 500000 ? 100000 : data.length > 100000 ? 10000 : 1000;
+      data.length > 5000000
+        ? 500000
+        : data.length > 500000
+        ? 100000
+        : data.length > 100000
+        ? 10000
+        : 1000;
     return xAxis
       .tickValues(d3.range(min, max, step))
       .tickSize(-height)
@@ -188,18 +194,7 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
           canvas.node()?.height ?? 0
         );
 
-        // Configure line
-        const line = d3.line().context(offscreenContext);
-        line.x(([d0, _]) => xScale(d0) ?? 0);
-        line.y(([_, d1]) => yScale(d1) ?? 0);
-
         // Draw the entire updated line on the off-screen canvas
-        // offscreenContext.beginPath();
-        // line(data.map((val) => [val.i, val.y]));
-        // offscreenContext.strokeStyle = theme.palette.action.focus;
-        // offscreenContext.lineWidth = 7;
-        // offscreenContext.stroke();
-
         drawLine(data, offscreenContext, xScale, yScale);
 
         // Swap the off-screen canvas with the on-screen canvas
@@ -219,18 +214,6 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
           canvas.node()?.width ?? 0,
           canvas.node()?.height ?? 0
         );
-        // const line = d3.line().context(context);
-        // line.x(([d0, _]) => {
-        //   return xScale(d0) ?? 0;
-        // });
-        // line.y(([_, d1]) => {
-        //   return yScale(d1) ?? 0;
-        // });
-        // context.beginPath();
-        // line(data.map((val) => [val.i, val.y]));
-        // context.strokeStyle = theme.palette.action.focus;
-        // context.lineWidth = 5;
-        // context.stroke();
 
         drawLine(data, context, xScale, yScale);
       }

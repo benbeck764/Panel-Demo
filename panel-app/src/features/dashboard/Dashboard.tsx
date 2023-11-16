@@ -7,6 +7,7 @@ import Stack from "@mui/material/Stack";
 import ChartJsDemo from "./ChartJsDemo";
 import D3Demo from "./D3Demo/D3Demo";
 import AntDemo from "./AntDemo";
+import VisxDemo from "./VisxDemo";
 
 export type LineChartData = {
   i: number;
@@ -42,17 +43,17 @@ const Dashboard: FC = () => {
   };
 
   const STATIC_DATA = false;
-  const realTimeDataCount = 100000;
-  const initialDataCount = 1000000 + realTimeDataCount;
-  const newDataHz = 1000;
+  const realTimeDataCount = 1000000;
+  const initialDataCount = 550000 + realTimeDataCount;
+  const newDataHz = 10000;
 
   const initialSplice = initialDataCount - realTimeDataCount;
 
   useEffect(() => {
     // Set wave parameters
-    const amplitude = 1; // Amplitude of the wave
-    const frequency = 4; // Frequency of the wave
-    const phase = 0; // Phase shift of the wave
+    const amplitude = 1;
+    const frequency = 4;
+    const phase = 0;
 
     // Generate wave-like data
     const waveData = generateWaveData(
@@ -143,13 +144,17 @@ const Dashboard: FC = () => {
             {/* Dynamic: Using upward of 300+ MB @ 15k DP | Maximum: 15k DP */}
             {/* <NivoDemo data={data} initialDataLength={initialSplice} /> */}
 
-            {/* Static: Okay with render ~2s @ 1M DP | Maximum: ??? DP */}
-            {/* Dynamic: Using upward of 900+ MB @ 1M DP | Maximum: 1M+ DP */}
-            {/* <ChartJsDemo data={data} initialDataLength={initialSplice} /> */}
-
             {/* Static: Okay with render ~6s @ 500k DP | Maximum: 500k+ DP */}
             {/* Dynamic: Using upward of 250+ MB @ 100k DP | Maximum: 100k DP */}
             {/* <AntDemo data={data} initialDataLength={initialSplice} /> */}
+
+            {/* Static: Rather quick to render ~4s @ 500k DP | Maximum: ~1M DP */}
+            {/* Dynamic: Using upward of 900+ MB @ 500k DP | Maximum: ~500K DP */}
+            {/* <VisxDemo data={data} initialDataLength={initialSplice} /> */}
+
+            {/* Static: Okay with render ~2s @ 1M DP | Maximum: ??? DP */}
+            {/* Dynamic: Using upward of 900+ MB @ 1M DP | Maximum: 1M+ DP */}
+            {/* <ChartJsDemo data={data} initialDataLength={initialSplice} /> */}
 
             {/* Static: Okay with render ~1s @ 1M DP | Maximum: ??? DP */}
             {/* Dynamic: Using upward of 400+ MB @ 1M DP | Maximum: 1M+ DP */}
