@@ -35,7 +35,7 @@ const Dashboard: FC = () => {
   ) => {
     const data = [];
     for (let i = 0; i < count; i++) {
-      const x = (i / count) * 2 * Math.PI; // Adjust the factor to control the width of the wave
+      const x = (i / count) * 2 * Math.PI;
       const y = amplitude * Math.sin(frequency * x + phase);
       data.push({ i, y });
     }
@@ -44,7 +44,7 @@ const Dashboard: FC = () => {
 
   const STATIC_DATA = false;
   const realTimeDataCount = 1000000;
-  const initialDataCount = 550000 + realTimeDataCount;
+  const initialDataCount = 1000000 + realTimeDataCount;
   const newDataHz = 10000;
 
   const initialSplice = initialDataCount - realTimeDataCount;

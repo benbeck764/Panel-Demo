@@ -6,30 +6,7 @@ import { StyledIframe } from "./Unity.styles";
 import Stack from "@mui/material/Stack";
 
 const Unity: FC = () => {
-  //const { getAccessTokenSilently } = useAuth0();
-
   const iframeRef = createRef<HTMLIFrameElement>();
-  // In your Unity project's JavaScript code
-  // function receiveMessage(message) {
-  //     console.log('Message from React:', message);
-  //     // Handle the message as needed
-  //   }
-
-  //   // Add an event listener to listen for messages
-  //   window.addEventListener('message', function (event) {
-  //     if (event.data && event.data.type === 'unityMessage') {
-  //       receiveMessage(event.data.message);
-  //     }
-  //   });
-
-  // In your React component
-  // const sendMessageToUnity = (message) => {
-  //     const iframe = document.querySelector('iframe');
-  //     iframe.contentWindow.postMessage({ type: 'reactMessage', message }, '*');
-  //   };
-
-  //   // Call the function when needed
-  //   sendMessageToUnity('Hello from React!');
 
   const toggleFullscreen = (): void => {
     const iframe = iframeRef.current;

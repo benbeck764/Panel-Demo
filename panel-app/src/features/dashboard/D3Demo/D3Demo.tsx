@@ -26,13 +26,13 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
   let canvas: d3.Selection<HTMLCanvasElement, unknown, HTMLElement, any>;
   let context: CanvasRenderingContext2D | null | undefined;
 
-  let offscreenCanvas: d3.Selection<
-    HTMLCanvasElement,
-    unknown,
-    HTMLElement,
-    any
-  >;
-  let offscreenContext: CanvasRenderingContext2D | null | undefined;
+  // let offscreenCanvas: d3.Selection<
+  //   HTMLCanvasElement,
+  //   unknown,
+  //   HTMLElement,
+  //   any
+  // >;
+  // let offscreenContext: CanvasRenderingContext2D | null | undefined;
 
   let xAxisG: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
   let xScale: d3.ScaleLinear<number, number>;
@@ -75,19 +75,18 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
       .attr("height", height)
       .style("position", "absolute");
 
-    offscreenCanvas = viewDiv
-      .append("canvas")
-      .attr("id", "offscreen-canvas")
-      .attr("width", width)
-      .attr("height", height)
-      .style("position", "absolute");
+    // offscreenCanvas = viewDiv
+    //   .append("canvas")
+    //   .attr("id", "offscreen-canvas")
+    //   .attr("width", width)
+    //   .attr("height", height)
+    //   .style("position", "absolute");
 
     context = canvas.node()?.getContext("2d");
-    offscreenContext = offscreenCanvas.node()?.getContext("2d");
+    //offscreenContext = offscreenCanvas.node()?.getContext("2d");
 
     // Create the primary group
     const mainG = svg.append("g");
-    //.attr("transform", `translate (${margin.left},${margin.top})`);
 
     // Add group for x-axis
     xAxisG = mainG
@@ -165,21 +164,15 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
     canvas = d3.select<HTMLCanvasElement, unknown>("#canvas");
     context = canvas.node()?.getContext("2d");
 
-    offscreenCanvas = d3.select<HTMLCanvasElement, unknown>(
-      "#offscreen-canvas"
-    );
-    offscreenContext = offscreenCanvas.node()?.getContext("2d");
+    const offscreenCanvas = new OffscreenCanvas(width, height);
+    const offscreenContext = offscreenCanvas.getContext("2d");
+    // offscreenCanvas = d3.select<HTMLCanvasElement, unknown>(
+    //   "#offscreen-canvas"
+    // );
+    // offscreenContext = offscreenCanvas.node()?.getContext("2d");
 
     if (doubleBuffering) {
       if (context && offscreenContext) {
-        // Clear the off-screen canvas
-        offscreenContext.clearRect(
-          0,
-          0,
-          canvas.node()?.width ?? 0,
-          canvas.node()?.height ?? 0
-        );
-
         // Draw the entire updated line on the off-screen canvas
         drawLine(data, offscreenContext, xScale, yScale);
 
@@ -190,7 +183,7 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
           canvas.node()?.width ?? 0,
           canvas.node()?.height ?? 0
         );
-        context.drawImage(offscreenCanvas.node()!, 0, 0);
+        context.drawImage(offscreenCanvas, 0, 0);
       }
     } else {
       if (context) {
@@ -208,12 +201,13 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
 
   const drawLine = (
     data: LineChartData[],
-    context: CanvasRenderingContext2D,
+    context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
     xLinearScale: d3.ScaleLinear<number, number>,
     yLinearScale: d3.ScaleLinear<number, number>
   ): void => {
     const length = data.length;
-    const chunkSize = 1000;
+    // Consider making this proportional to data.length
+    const chunkSize = 300;
     const result: LineChartData[][] = [];
 
     for (let i = 0; i < length; i += chunkSize) {
@@ -224,7 +218,7 @@ const D3Demo: FC<D3DemoProps> = (props: D3DemoProps) => {
       result.push(chunk);
     }
 
-    const line = d3.line().context(context);
+    const line = d3.line().context(context as CanvasRenderingContext2D);
     line.x(([d0, _]) => {
       return xLinearScale(d0) ?? 0;
     });

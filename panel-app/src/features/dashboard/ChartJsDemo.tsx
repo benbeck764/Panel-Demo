@@ -101,7 +101,7 @@ const ChartJsDemo: FC<ChartJsDemoProps> = (props: ChartJsDemoProps) => {
 
   return (
     <AppCard sx={{ p: 2 }}>
-      <Typography variant="h6">Chart.js [react-chart-2] (Canvas)</Typography>
+      <Typography variant="h6">Chart.js [react-chartjs-2] (Canvas)</Typography>
       <Box>
         <Line
           options={options}
