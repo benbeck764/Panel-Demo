@@ -14,7 +14,7 @@ export const StyledPageContainer = styled(Grid)(
 
 export const StyledPageContent = styled(Box)(({ theme }: { theme: Theme }) => ({
   [theme.breakpoints.up("xs")]: {
-    width: "calc(100% - 24px)",
+    width: "calc(100%)",
   },
 
   marginTop: theme.pageContentMargin,

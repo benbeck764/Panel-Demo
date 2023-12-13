@@ -105,7 +105,7 @@ const Dashboard: FC = () => {
   };
 
   return (
-    <Stack gap={1}>
+    <Stack gap={1} my={4} mx={2}>
       <Typography variant="h3">Dashboard</Typography>
       <Typography variant="paragraphBold">{`Data Points: ${data.length} (${
         STATIC_DATA ? "Static" : `Dynamic: ${newDataHz} Hz`

@@ -112,7 +112,7 @@ const paragraphExtraSmallBold = {
 };
 
 const spacing = 8;
-const pageContentMargin = spacing * 4;
+const pageContentMargin = 0
 
 const headerHeights = {
   xs: 48,
