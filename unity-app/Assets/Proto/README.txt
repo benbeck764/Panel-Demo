@@ -1,0 +1,1 @@
+protoc --proto_path="C:\dev\Exploration\Panel-Demo\unity-app\Assets\Proto\Input" --csharp_out="C:\dev\Exploration\Panel-Demo\unity-app\Assets\Proto\Output" test.proto

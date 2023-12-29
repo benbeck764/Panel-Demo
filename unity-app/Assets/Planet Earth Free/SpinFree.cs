@@ -2,14 +2,6 @@
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 
-public class SpinSettings
-{
-    [JsonProperty("clockwise")]
-    public bool Clockwise;
-    [JsonProperty("speed")]
-    public float Speed;
-}
-
 /// <summary>
 /// Spin the object at a specified speed
 /// </summary>
@@ -40,7 +32,7 @@ public class SpinFree : MonoBehaviour {
     {
         DispatchEarthConfig(clockwise, speed);
 
-        var config = new SpinSettings { Clockwise = clockwise, Speed = speed };
+        var config = new EarthConfig { Clockwise = clockwise, Speed = speed };
         var json = JsonConvert.SerializeObject(config);
         DispatchEarthConfigObject(json);
     }
@@ -76,16 +68,16 @@ public class SpinFree : MonoBehaviour {
     {
         speed = newSpeed;
     }
-    public void SetSpinSettingsString(string settingsJson)
+    public void SetEarthConfigString(string earthConfigJson)
     {
-        var settings = JsonUtility.FromJson<SpinSettings>(settingsJson);    
-        clockwise = settings.Clockwise;
-        speed = settings.Speed;
+        var earthConfig = JsonUtility.FromJson<EarthConfig>(earthConfigJson);    
+        clockwise = earthConfig.Clockwise;
+        speed = earthConfig.Speed;
     }
 
-    public void SetSpinSettings(SpinSettings settings)
+    public void SetEarthConfig(EarthConfig earthConfig)
     {
-		clockwise = settings.Clockwise;
-        speed = settings.Speed;
+		clockwise = earthConfig.Clockwise;
+        speed = earthConfig.Speed;
     }
 }
