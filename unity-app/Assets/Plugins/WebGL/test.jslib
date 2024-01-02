@@ -2,8 +2,8 @@ mergeInto(LibraryManager.library, {
   DispatchEarthConfig: function (clockwise, speed) {
     window.dispatchReactUnityEvent("EarthConfigInitialized", clockwise, speed);
   },
-  DispatchEarthConfigObject: function (config) {
-    const jsonString = UTF8ToString(config);
+  DispatchEarthConfigDto: function (dto) {
+    const jsonString = UTF8ToString(dto);
     window.dispatchReactUnityEvent("EarthConfigObjectInitialized", jsonString);
   },
 });

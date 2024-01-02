@@ -2,6 +2,21 @@
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 
+
+public class EarthConfigDto
+{
+    [JsonProperty("clockwise")]
+    public bool Clockwise;
+    [JsonProperty("speed")]
+    public float Speed;
+
+    public EarthConfigDto(EarthConfig proto)
+    {
+        this.Clockwise = proto.Clockwise;
+        this.Speed = proto.Speed;
+    }
+}
+
 /// <summary>
 /// Spin the object at a specified speed
 /// </summary>
@@ -12,7 +27,7 @@ public class SpinFree : MonoBehaviour {
     private static extern void DispatchEarthConfig(bool clockwise, float speed);
 
     [DllImport("__Internal")]
-    private static extern void DispatchEarthConfigObject(string config);
+    private static extern void DispatchEarthConfigDto(string dto);
 
 
     [Tooltip("Spin: Yes or No")]
@@ -30,11 +45,10 @@ public class SpinFree : MonoBehaviour {
 
     private void Start()
     {
-        DispatchEarthConfig(clockwise, speed);
-
-        var config = new EarthConfig { Clockwise = clockwise, Speed = speed };
-        var json = JsonConvert.SerializeObject(config);
-        DispatchEarthConfigObject(json);
+        //DispatchEarthConfig(clockwise, speed);
+        var dto = new EarthConfigDto(new EarthConfig { Clockwise = clockwise, Speed = speed });
+        var json = JsonConvert.SerializeObject(dto);
+        DispatchEarthConfigDto(json);
     }
 
     // Update is called once per frame
