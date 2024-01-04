@@ -22,12 +22,13 @@ public static partial class TestReflection {
   static TestReflection() {
     byte[] descriptorData = global::System.Convert.FromBase64String(
         string.Concat(
-          "Cgp0ZXN0LnByb3RvIi8KC0VhcnRoQ29uZmlnEhEKCWNsb2Nrd2lzZRgBIAEo",
-          "CBINCgVzcGVlZBgCIAEoAmIGcHJvdG8z"));
+          "Cgp0ZXN0LnByb3RvIlEKC0VhcnRoQ29uZmlnEhYKCWNsb2Nrd2lzZRgBIAEo",
+          "CEgAiAEBEhIKBXNwZWVkGAIgASgCSAGIAQFCDAoKX2Nsb2Nrd2lzZUIICgZf",
+          "c3BlZWRiBnByb3RvMw=="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-          new pbr::GeneratedClrTypeInfo(typeof(global::EarthConfig), global::EarthConfig.Parser, new[]{ "Clockwise", "Speed" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(typeof(global::EarthConfig), global::EarthConfig.Parser, new[]{ "Clockwise", "Speed" }, new[]{ "Clockwise", "Speed" }, null, null, null)
         }));
   }
   #endregion
@@ -42,6 +43,7 @@ public sealed partial class EarthConfig : pb::IMessage<EarthConfig>
 {
   private static readonly pb::MessageParser<EarthConfig> _parser = new pb::MessageParser<EarthConfig>(() => new EarthConfig());
   private pb::UnknownFieldSet _unknownFields;
+  private int _hasBits0;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public static pb::MessageParser<EarthConfig> Parser { get { return _parser; } }
@@ -69,6 +71,7 @@ public sealed partial class EarthConfig : pb::IMessage<EarthConfig>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public EarthConfig(EarthConfig other) : this() {
+    _hasBits0 = other._hasBits0;
     clockwise_ = other.clockwise_;
     speed_ = other.speed_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -82,26 +85,56 @@ public sealed partial class EarthConfig : pb::IMessage<EarthConfig>
 
   /// <summary>Field number for the "clockwise" field.</summary>
   public const int ClockwiseFieldNumber = 1;
+  private readonly static bool ClockwiseDefaultValue = false;
+
   private bool clockwise_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public bool Clockwise {
-    get { return clockwise_; }
+    get { if ((_hasBits0 & 1) != 0) { return clockwise_; } else { return ClockwiseDefaultValue; } }
     set {
+      _hasBits0 |= 1;
       clockwise_ = value;
     }
+  }
+  /// <summary>Gets whether the "clockwise" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasClockwise {
+    get { return (_hasBits0 & 1) != 0; }
+  }
+  /// <summary>Clears the value of the "clockwise" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearClockwise() {
+    _hasBits0 &= ~1;
   }
 
   /// <summary>Field number for the "speed" field.</summary>
   public const int SpeedFieldNumber = 2;
+  private readonly static float SpeedDefaultValue = 0F;
+
   private float speed_;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public float Speed {
-    get { return speed_; }
+    get { if ((_hasBits0 & 2) != 0) { return speed_; } else { return SpeedDefaultValue; } }
     set {
+      _hasBits0 |= 2;
       speed_ = value;
     }
+  }
+  /// <summary>Gets whether the "speed" field is set</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public bool HasSpeed {
+    get { return (_hasBits0 & 2) != 0; }
+  }
+  /// <summary>Clears the value of the "speed" field</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+  public void ClearSpeed() {
+    _hasBits0 &= ~2;
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -128,8 +161,8 @@ public sealed partial class EarthConfig : pb::IMessage<EarthConfig>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public override int GetHashCode() {
     int hash = 1;
-    if (Clockwise != false) hash ^= Clockwise.GetHashCode();
-    if (Speed != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Speed);
+    if (HasClockwise) hash ^= Clockwise.GetHashCode();
+    if (HasSpeed) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Speed);
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
     }
@@ -148,11 +181,11 @@ public sealed partial class EarthConfig : pb::IMessage<EarthConfig>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     output.WriteRawMessage(this);
   #else
-    if (Clockwise != false) {
+    if (HasClockwise) {
       output.WriteRawTag(8);
       output.WriteBool(Clockwise);
     }
-    if (Speed != 0F) {
+    if (HasSpeed) {
       output.WriteRawTag(21);
       output.WriteFloat(Speed);
     }
@@ -166,11 +199,11 @@ public sealed partial class EarthConfig : pb::IMessage<EarthConfig>
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-    if (Clockwise != false) {
+    if (HasClockwise) {
       output.WriteRawTag(8);
       output.WriteBool(Clockwise);
     }
-    if (Speed != 0F) {
+    if (HasSpeed) {
       output.WriteRawTag(21);
       output.WriteFloat(Speed);
     }
@@ -184,10 +217,10 @@ public sealed partial class EarthConfig : pb::IMessage<EarthConfig>
   [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
   public int CalculateSize() {
     int size = 0;
-    if (Clockwise != false) {
+    if (HasClockwise) {
       size += 1 + 1;
     }
-    if (Speed != 0F) {
+    if (HasSpeed) {
       size += 1 + 4;
     }
     if (_unknownFields != null) {
@@ -202,10 +235,10 @@ public sealed partial class EarthConfig : pb::IMessage<EarthConfig>
     if (other == null) {
       return;
     }
-    if (other.Clockwise != false) {
+    if (other.HasClockwise) {
       Clockwise = other.Clockwise;
     }
-    if (other.Speed != 0F) {
+    if (other.HasSpeed) {
       Speed = other.Speed;
     }
     _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);

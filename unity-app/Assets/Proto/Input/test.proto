@@ -1,6 +1,6 @@
 syntax = "proto3";
 
 message EarthConfig {
-  bool clockwise = 1;
-  float speed = 2;
+  optional bool clockwise = 1;
+  optional float speed = 2;
 }
